@@ -47,7 +47,7 @@ Scene::Initialize
 */
 void Scene::Initialize() {
 	Body body;
-	body.m_position = Vec3( 0, 0, 1 );
+	body.m_position = Vec3( 0, 0, 10 );
 	body.m_orientation = Quat( 0, 0, 0, 1 );
 	body.m_linearVelocity = Vec3(1, 0, 0);
 	body.m_invMass = 1.0f;
