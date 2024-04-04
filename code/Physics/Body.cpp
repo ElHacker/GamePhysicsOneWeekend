@@ -36,3 +36,13 @@ Vec3 Body::BodySpaceToWorldSpace(const Vec3& worldPt) const {
 	Vec3 worldSpace = GetCenterOfMassWorldSpace() + m_orientation.RotatePoint(worldPt);
 	return worldSpace;
 }
+
+void Body::ApplyImpulseLinear(const Vec3& impulse) {
+	if (0.0f == m_invMass) {
+		return;
+	}
+	// p = mv
+	// dp = m dv = J
+	// => dv = J / m
+	m_linearVelocity += impulse * m_invMass;
+}
