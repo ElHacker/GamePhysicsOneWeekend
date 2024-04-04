@@ -12,8 +12,17 @@ void ResolveContact( contact_t & contact ) {
 	Body* bodyA = contact.bodyA;
 	Body* bodyB = contact.bodyB;
 
-	bodyA->m_linearVelocity.Zero();
-	bodyB->m_linearVelocity.Zero();
+	const float invMassA = bodyA->m_invMass;
+	const float invMassB = bodyB->m_invMass;
+
+	// Calculate the collision impulse
+	const Vec3& n = contact.normal;
+	const Vec3 vab = bodyA->m_linearVelocity - bodyB->m_linearVelocity;
+	const float ImpulseJ = -2.0f * vab.Dot(n) / (invMassA + invMassB);
+	const Vec3 vectorImpulseJ = n * ImpulseJ;
+
+	bodyA->ApplyImpulseLinear(vectorImpulseJ * 1.0f);
+	bodyB->ApplyImpulseLinear(vectorImpulseJ * -1.0f);
 
 	// Let's also move our colliding objects to just outside of each other.
 	// This is called "Projection Method"
