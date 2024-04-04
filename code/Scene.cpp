@@ -79,8 +79,25 @@ void Scene::Update( const float dt_sec ) {
 		body->ApplyImpulseLinear(impulseGravity);
 	}
 
+	// Check for collisions with other bodies
 	for (int i = 0; i < m_bodies.size(); ++i) {
-		// Position update
+		for (int j = i + 1; j < m_bodies.size(); ++j) {
+			Body* bodyA = &m_bodies[i];
+			Body* bodyB = &m_bodies[j];
+			// Skip body pairs with infinite mass
+			if (0.0f == bodyA->m_invMass && 0.0f == bodyB->m_invMass) {
+				continue;
+			}
+
+			if (Intersect(bodyA, bodyB)) {
+				bodyA->m_linearVelocity.Zero();
+				bodyB->m_linearVelocity.Zero();
+			}
+		}
+	}
+
+	// Position update
+	for (int i = 0; i < m_bodies.size(); ++i) {
 		m_bodies[i].m_position += m_bodies[i].m_linearVelocity * dt_sec;
 	}
 }
