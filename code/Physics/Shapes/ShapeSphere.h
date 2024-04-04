@@ -21,7 +21,7 @@ public:
 
 	Bounds GetBounds( const Vec3 & pos, const Quat & orient ) const override;
 	Bounds GetBounds() const override;
-
+	
 	shapeType_t GetType() const override { return SHAPE_SPHERE; }
 
 public:
