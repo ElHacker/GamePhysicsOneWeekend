@@ -6,6 +6,12 @@
 #include <assert.h>
 #include <stdio.h>
 
+#ifdef PHYSICSLIBRARY_EXPORTS
+#define PHYSICSLIBRARY_API __declspec(dllexport)
+#else
+#define PHYSICSLIBRARY_API __declspec(dllimport)
+#endif
+
 /*
  ================================
  Vec2
@@ -188,7 +194,7 @@ inline bool Vec2::IsValid() const {
  Vec3
  ================================
  */
-class Vec3 {
+class PHYSICSLIBRARY_API Vec3 {
 public:
 	Vec3();
 	Vec3( float value );
