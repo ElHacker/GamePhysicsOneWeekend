@@ -89,9 +89,9 @@ void Scene::Update( const float dt_sec ) {
 				continue;
 			}
 
-			if (Intersect(bodyA, bodyB)) {
-				bodyA->m_linearVelocity.Zero();
-				bodyB->m_linearVelocity.Zero();
+			contact_t contact;
+			if (Intersect(bodyA, bodyB, contact)) {
+				ResolveContact(contact);
 			}
 		}
 	}
