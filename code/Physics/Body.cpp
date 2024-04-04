@@ -51,6 +51,22 @@ Mat3 Body::GetInverseInertiaTensorWorldSpace() const {
 	return invInertiaTensor;
 }
 
+void Body::ApplyImpulse(const Vec3& impulsePoint, const Vec3& impulse)
+{
+	if (0.0f == m_invMass) {
+		return;
+	}
+
+	// impulsePoint is the world space location of the application of the impulse
+	// impuse is the world space direction and magnitude of the impulse
+	ApplyImpulseLinear(impulse);
+
+	Vec3 position = GetCenterOfMassWorldSpace(); // applying impulses must produce torques through the center of mass
+	Vec3 r = impulsePoint - position;
+	Vec3 dL = r.Cross(impulse); // this is in world space
+	ApplyImpulseAngular(dL);
+}
+
 void Body::ApplyImpulseLinear(const Vec3& impulse) {
 	if (0.0f == m_invMass) {
 		return;
@@ -76,4 +92,33 @@ void Body::ApplyImpulseAngular(const Vec3& impulse) {
 		m_angularVelocity.Normalize();
 		m_angularVelocity *= maxAngularSpeed;
 	}
+}
+
+void Body::Update(const float dt_sec) {
+	m_position += m_linearVelocity * dt_sec;
+
+	// okay, we have an angular velocity around the center of mass, this needs to be
+	// converted somehow to relative to model position. This way we can properly update
+	// the orientation of the model.
+	Vec3 positionCM = GetCenterOfMassWorldSpace();
+	Vec3 cmToPos = m_position - positionCM;
+
+	// Total Torque is equal to external applied torques + internal torque (precession)
+	// T = T_external + omega x I * omega
+	// T_external = 0 because it was applid in the collision response function.
+	// T = Ia = w x I * w
+	// a = I^-1 (w x I * w)
+	Mat3 orientation = m_orientation.ToMat3();
+	Mat3 inertiaTensor = orientation * m_shape->InertiaTensor() * orientation.Transpose();
+	Vec3 alpha = inertiaTensor.Inverse() * (m_angularVelocity.Cross(inertiaTensor * m_angularVelocity));
+	m_angularVelocity += alpha * dt_sec;
+
+	// Update orientation
+	Vec3 dAngle = m_angularVelocity * dt_sec;
+	Quat dq = Quat(dAngle, dAngle.GetMagnitude());
+	m_orientation = dq * m_orientation;
+	m_orientation.Normalize();
+
+	// Now get the new model position
+	m_position = positionCM + dq.RotatePoint(cmToPos);
 }
