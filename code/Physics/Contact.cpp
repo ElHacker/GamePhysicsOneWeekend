@@ -12,8 +12,8 @@ void ResolveContact( contact_t & contact ) {
 	Body* bodyA = contact.bodyA;
 	Body* bodyB = contact.bodyB;
 
-	const Vec3 ptOnA = contact.ptOnA_WorldSpace;
-	const Vec3 ptOnB = contact.ptOnB_WorldSpace;
+	const Vec3 ptOnA = bodyA->BodySpaceToWorldSpace(contact.ptOnA_LocalSpace);
+	const Vec3 ptOnB = bodyB->BodySpaceToWorldSpace(contact.ptOnB_LocalSpace);
 
 	const float elasticityA = bodyA->m_elasticity;
 	const float elasticityB = bodyB->m_elasticity;
@@ -81,11 +81,13 @@ void ResolveContact( contact_t & contact ) {
 	// Let's also move our colliding objects to just outside of each other.
 	// This is called "Projection Method"
 	//
-	const Vec3 ds = ptOnB - ptOnA;
+	if (0.0f == contact.timeOfImpact) {
+		const Vec3 ds = ptOnB - ptOnA;
 
-	const float tA = bodyA->m_invMass / (bodyA->m_invMass + bodyB->m_invMass);
-	const float tB = bodyB->m_invMass / (bodyA->m_invMass + bodyB->m_invMass);
+		const float tA = invMassA / (invMassA + invMassB);
+		const float tB = invMassB / (invMassA + invMassB);
 
-	bodyA->m_position += ds * tA;
-	bodyB->m_position -= ds * tB;
+		bodyA->m_position += ds * tA;
+		bodyB->m_position -= ds * tB;
+	}
 }
