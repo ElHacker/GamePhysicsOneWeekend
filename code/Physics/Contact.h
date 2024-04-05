@@ -4,6 +4,12 @@
 #pragma once
 #include "Body.h"
 
+#ifdef PHYSICSLIBRARY_EXPORTS
+#define PHYSICSLIBRARY_API __declspec(dllexport)
+#else
+#define PHYSICSLIBRARY_API __declspec(dllimport)
+#endif
+
 
 struct contact_t {
 	Vec3 ptOnA_WorldSpace;
@@ -19,4 +25,4 @@ struct contact_t {
 	Body * bodyB;
 };
 
-void ResolveContact( contact_t & contact );
+extern "C" PHYSICSLIBRARY_API void ResolveContact(contact_t & contact);

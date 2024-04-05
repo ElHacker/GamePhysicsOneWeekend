@@ -9,12 +9,18 @@
 #include "Physics/Constraints.h"
 #include "Physics/Manifold.h"
 
+#ifdef PHYSICSLIBRARY_EXPORTS
+#define PHYSICSLIBRARY_API __declspec(dllexport)
+#else
+#define PHYSICSLIBRARY_API __declspec(dllimport)
+#endif
+
 /*
 ====================================================
 Scene
 ====================================================
 */
-class Scene {
+class PHYSICSLIBRARY_API Scene {
 public:
 	Scene() { m_bodies.reserve( 128 ); }
 	~Scene();
