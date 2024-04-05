@@ -19,6 +19,9 @@
     <Filter Include="code\Physics\Constraints">
       <UniqueIdentifier>{2305611d-ec70-4b22-952a-04699c9ff7d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="code\Export">
+      <UniqueIdentifier>{6ccc9f63-3590-4ed4-808c-dc5738709251}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\main.cpp">
@@ -128,6 +131,9 @@
     </ClCompile>
     <ClCompile Include="code\Physics\Manifold.cpp">
       <Filter>code\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="code\Export\PhysicsLibrary.cpp">
+      <Filter>code\Export</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -251,5 +257,13 @@
     <ClInclude Include="code\Physics\Manifold.h">
       <Filter>code\Physics</Filter>
     </ClInclude>
+    <ClInclude Include="code\Export\PhysicsLibrary.h">
+      <Filter>code\Export</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="code\Export\build_dll.bat">
+      <Filter>code\Export</Filter>
+    </None>
   </ItemGroup>
 </Project>

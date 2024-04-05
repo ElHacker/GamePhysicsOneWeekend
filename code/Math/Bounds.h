@@ -7,12 +7,19 @@
 #include "Vector.h"
 #include <vector>
 
+
+#ifdef PHYSICSLIBRARY_EXPORTS
+#define PHYSICSLIBRARY_API __declspec(dllexport)
+#else
+#define PHYSICSLIBRARY_API __declspec(dllimport)
+#endif
+
 /*
 ====================================================
 Bounds
 ====================================================
 */
-class Bounds {
+class PHYSICSLIBRARY_API Bounds {
 public:
 	Bounds() { Clear(); }
 	Bounds( const Bounds & rhs ) : mins( rhs.mins ), maxs( rhs.maxs ) {}

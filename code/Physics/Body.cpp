@@ -9,10 +9,19 @@ Body::Body
 ====================================================
 */
 Body::Body() :
-m_position( 0.0f ),
-m_orientation( 0.0f, 0.0f, 0.0f, 1.0f ),
-m_shape( NULL ) {
+	m_position{ 0.0f },
+	m_orientation{ 0.0f, 0.0f, 0.0f, 1.0f },
+	m_invMass{ 1.0f },
+	m_elasticity{ 1.0f },
+	m_friction{ 0.5f },
+	m_shape{ NULL } {
 }
+
+Body::Body(float invMass, float elasticity, float friction) :
+	m_invMass{ invMass },
+	m_elasticity{ elasticity },
+	m_friction{ friction },
+	m_shape{ NULL } {}
 
 Vec3 Body::GetCenterOfMassWorldSpace() const {
 	const Vec3 centerOfMass = m_shape->GetCenterOfMass();
@@ -121,4 +130,24 @@ void Body::Update(const float dt_sec) {
 
 	// Now get the new model position
 	m_position = positionCM + dq.RotatePoint(cmToPos);
+}
+
+void Body::SetPosition(float x, float y, float z) {
+	m_position = Vec3( x, y, z );
+}
+
+void Body::SetOrientation(float x, float y, float z, float w) {
+	m_orientation = Quat(x, y, z, w);
+}
+
+void Body::SetLinearVelocity(float x, float y, float z) {
+	m_linearVelocity = Vec3(x, y, z);
+}
+
+void Body::SetAngularVelocity(float x, float y, float z) {
+	m_angularVelocity = Vec3(x, y, z);
+}
+
+void Body::SetSphereShape(float radius) {
+	m_shape = new ShapeSphere(radius);
 }

@@ -5,12 +5,19 @@
 #include "Vector.h"
 #include "Matrix.h"
 
+
+#ifdef PHYSICSLIBRARY_EXPORTS
+#define PHYSICSLIBRARY_API __declspec(dllexport)
+#else
+#define PHYSICSLIBRARY_API __declspec(dllimport)
+#endif
+
 /*
  ================================
  Quat
  ================================
  */
-class Quat {
+class PHYSICSLIBRARY_API Quat {
 public:
 	Quat();	
 	Quat( const Quat & rhs );

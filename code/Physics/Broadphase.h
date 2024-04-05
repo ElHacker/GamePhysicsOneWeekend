@@ -5,6 +5,12 @@
 #include "Body.h"
 #include <vector>
 
+#ifdef PHYSICSLIBRARY_EXPORTS
+#define PHYSICSLIBRARY_API __declspec(dllexport)
+#else
+#define PHYSICSLIBRARY_API __declspec(dllimport)
+#endif
+
 
 struct collisionPair_t {
 	int a;
@@ -18,4 +24,4 @@ struct collisionPair_t {
 	}
 };
 
-void BroadPhase( const Body * bodies, const int num, std::vector< collisionPair_t > & finalPairs, const float dt_sec );
+extern "C" PHYSICSLIBRARY_API void BroadPhase(const Body * bodies, const int num, std::vector< collisionPair_t > &finalPairs, const float dt_sec);

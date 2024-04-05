@@ -2,6 +2,7 @@
 //  Scene.cpp
 //
 #include "Scene.h"
+#include "Export/DebugCPP.h"
 #include "Physics/Contact.h"
 #include "Physics/Intersections.h"
 #include "Physics/Broadphase.h"
@@ -104,6 +105,7 @@ Scene::Update
 ====================================================
 */
 void Scene::Update( const float dt_sec ) {
+	Debug::Log("Bodies size: " + std::to_string(m_bodies.size()) + ",dt_sec:" + std::to_string(dt_sec), Color::Green);
 	// Gravity needs to be an impulse
 	for (int i = 0; i < m_bodies.size(); ++i) {
 		Body* body = &m_bodies[i];
@@ -113,6 +115,7 @@ void Scene::Update( const float dt_sec ) {
 		float mass = 1.0f / body->m_invMass;
 		Vec3 impulseGravity = Vec3(0, 0, -10) * mass * dt_sec;
 		body->ApplyImpulseLinear(impulseGravity);
+		Debug::Log("Bodies pos: " + std::to_string(body->m_position.x) + ", " + std::to_string(body->m_position.y) + ", " + std::to_string(body->m_position.z), Color::Green);
 	}
 
 	//

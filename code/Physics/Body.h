@@ -8,17 +8,26 @@
 #include "../Math/Bounds.h"
 #include "Shapes.h"
 
+/*
 #include "../Renderer/model.h"
 #include "../Renderer/shader.h"
+*/
+
+#ifdef PHYSICSLIBRARY_EXPORTS
+#define PHYSICSLIBRARY_API __declspec(dllexport)
+#else
+#define PHYSICSLIBRARY_API __declspec(dllimport)
+#endif
 
 /*
 ====================================================
 Body
 ====================================================
 */
-class Body {
+class PHYSICSLIBRARY_API Body {
 public:
 	Body();
+	Body(float invMass, float elasticity, float friction);
 
 	Vec3		m_position;
 	Quat		m_orientation;
@@ -44,4 +53,11 @@ public:
 	void ApplyImpulseAngular(const Vec3& impulse);
 
 	void Update(const float dt_sec);
+
+	// Support external usage
+	void SetPosition(float x, float y, float z);
+	void SetOrientation(float x, float y, float z, float w);
+	void SetLinearVelocity(float x, float y, float z);
+	void SetAngularVelocity(float x, float y, float z);
+	void SetSphereShape(float radius);
 };
